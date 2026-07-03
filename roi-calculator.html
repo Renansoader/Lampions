@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de ROI — Lampions Marketing</title>
+  <meta name="description" content="Calcule o retorno potencial dos seus anúncios com a Calculadora de ROI da Lampions Marketing." />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    body { min-height: 100vh; }
+
+    /* ── Header ── */
+    .calc-header {
+      background: var(--black-2);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+    }
+
+    .calc-header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .calc-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      color: var(--yellow);
+      letter-spacing: 0.08em;
+      text-decoration: none;
+    }
+
+    .calc-logo span { color: var(--white); }
+
+    .back-link {
+      font-size: 13px;
+      color: var(--gray);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--yellow); }
+
+    /* ── Hero ── */
+    .calc-hero {
+      padding: 72px 0 56px;
+      text-align: center;
+      background: var(--black-2);
+    }
+
+    .calc-hero h1 {
+      font-size: clamp(44px, 6vw, 84px);
+      line-height: 0.95;
+      margin-bottom: 16px;
+    }
+
+    .calc-hero h1 span { color: var(--yellow); }
+
+    .calc-hero p {
+      color: var(--gray);
+      font-size: 17px;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── Main layout ── */
+    .calc-main { padding: 64px 0 96px; }
+
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* ── Input panel ── */
+    .panel {
+      background: var(--black-3);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 40px;
+    }
+
+    .panel-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .panel-subtitle {
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 32px;
+    }
+
+    .input-wrapper { position: relative; }
+
+    .input-prefix, .input-suffix {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--yellow);
+      pointer-events: none;
+    }
+
+    .input-prefix { left: 16px; }
+    .input-suffix { right: 16px; }
+
+    .input-wrapper input {
+      padding-left: 36px !important;
+    }
+
+    .input-wrapper.suffix input {
+      padding-right: 40px !important;
+    }
+
+    .range-wrapper {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-wrapper input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      padding: 0;
+      border: none;
+      cursor: pointer;
+    }
+
+    .range-wrapper input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--yellow);
+      cursor: pointer;
+    }
+
+    .range-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      color: var(--yellow);
+      min-width: 52px;
+      text-align: right;
+    }
+
+    /* ── Results panel ── */
+    .results-panel {
+      background: var(--black-3);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      overflow: hidden;
+      position: sticky;
+      top: 24px;
+    }
+
+    .results-header {
+      background: var(--yellow);
+      padding: 28px 36px;
+    }
+
+    .results-header h2 {
+      font-size: 32px;
+      color: var(--black);
+    }
+
+    .results-header p {
+      font-size: 13px;
+      color: rgba(10,10,10,0.6);
+      margin-top: 4px;
+    }
+
+    .results-body { padding: 32px 36px; }
+
+    .result-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .result-item:last-child { border-bottom: none; }
+
+    .result-label {
+      font-size: 13px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .result-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+
+    /* ROI is the big highlight */
+    .result-roi {
+      background: rgba(245,195,0,0.06);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: center;
+      border: 1px solid rgba(245,195,0,0.15);
+    }
+
+    .roi-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 8px;
+    }
+
+    .roi-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .roi-sub {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 6px;
+    }
+
+    .results-cta {
+      padding: 0 36px 36px;
+    }
+
+    .results-cta .btn {
+      width: 100%;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .results-disclaimer {
+      font-size: 11px;
+      color: var(--gray);
+      text-align: center;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    /* ── Explanation section ── */
+    .how-works {
+      background: var(--black-2);
+      padding: 72px 0;
+    }
+
+    .how-works .grid-3 { margin-top: 48px; }
+
+    .how-card {
+      text-align: center;
+      padding: 32px 24px;
+    }
+
+    .how-icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .how-card h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .how-card p {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 40px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      color: var(--yellow);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-logo span { color: var(--white); }
+    .footer-copy { font-size: 13px; color: var(--gray); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .calc-layout { grid-template-columns: 1fr; }
+      .results-panel { position: static; }
+    }
+
+    @media (max-width: 640px) {
+      .panel { padding: 28px 24px; }
+      .results-body { padding: 24px; }
+      .results-header { padding: 24px; }
+      .results-cta { padding: 0 24px 28px; }
+      .roi-value { font-size: 56px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header class="calc-header">
+    <div class="container">
+      <a href="index.html" class="calc-logo">LAMPIONS<span>.</span></a>
+      <a href="index.html" class="back-link">← Voltar ao site</a>
+    </div>
+  </header>
+
+  <!-- ── Hero ── -->
+  <div class="calc-hero">
+    <div class="container">
+      <div class="label">Ferramenta gratuita</div>
+      <h1>CALCULADORA<br>DE <span>ROI</span></h1>
+      <p>
+        Descubra o potencial de retorno dos seus anúncios em segundos.
+        Dados em tempo real para tomadas de decisão mais inteligentes.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Calculator ── -->
+  <main class="calc-main">
+    <div class="container">
+      <div class="calc-layout">
+
+        <!-- Inputs -->
+        <div class="panel">
+          <div class="panel-title">SEUS DADOS</div>
+          <p class="panel-subtitle">Preencha os campos abaixo — os resultados atualizam automaticamente.</p>
+
+          <div class="form-group">
+            <label>Investimento mensal em anúncios</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="investimento" value="1000" min="0" step="100"
+                     oninput="calcular()" placeholder="1000" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Ticket médio do produto ou serviço</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="ticket" value="300" min="0" step="10"
+                     oninput="calcular()" placeholder="300" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              Taxa de conversão de leads em clientes
+              <span style="color:var(--yellow);margin-left:4px;" title="Percentual de leads que viram clientes pagantes">ⓘ</span>
+            </label>
+            <div class="range-wrapper">
+              <input type="range" id="conversaoRange" min="0.5" max="30" step="0.5" value="3"
+                     oninput="syncRange('conversao', 'conversaoRange'); calcular()" />
+              <div class="range-value" id="conversaoDisplay">3%</div>
+            </div>
+            <div class="input-wrapper suffix" style="margin-top:10px;">
+              <input type="number" id="conversao" value="3" min="0.1" max="100" step="0.1"
+                     oninput="syncInput('conversao', 'conversaoRange', 'conversaoDisplay', '%'); calcular()" placeholder="3" />
+              <span class="input-suffix">%</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              Custo por clique estimado (CPC)
+              <span style="color:var(--yellow);margin-left:4px;" title="Quanto você paga em média por cada clique no anúncio">ⓘ</span>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="cpc" value="1.50" min="0.01" step="0.10"
+                     oninput="calcular()" placeholder="1.50" />
+            </div>
+            <div class="range-wrapper" style="margin-top:10px;">
+              <input type="range" id="cpcRange" min="0.10" max="20" step="0.10" value="1.50"
+                     oninput="document.getElementById('cpc').value = this.value; calcular()" />
+              <div class="range-value" id="cpcDisplay" style="font-size:16px;">R$1,50</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              Taxa de lead por clique
+              <span style="color:var(--yellow);margin-left:4px;" title="Percentual de visitantes que viram leads (preenchem formulário, mandam mensagem etc)">ⓘ</span>
+            </label>
+            <div class="range-wrapper">
+              <input type="range" id="leadRateRange" min="1" max="50" step="1" value="10"
+                     oninput="syncRange('leadRate', 'leadRateRange'); calcular()" />
+              <div class="range-value" id="leadRateDisplay">10%</div>
+            </div>
+            <div class="input-wrapper suffix" style="margin-top:10px;">
+              <input type="number" id="leadRate" value="10" min="0.1" max="100" step="1"
+                     oninput="syncInput('leadRate', 'leadRateRange', 'leadRateDisplay', '%'); calcular()" placeholder="10" />
+              <span class="input-suffix">%</span>
+            </div>
+          </div>
+
+          <!-- Presets -->
+          <div style="margin-top:32px;">
+            <p style="font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray);margin-bottom:14px;">
+              Cenários rápidos
+            </p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn btn-secondary" onclick="aplicarCenario(500, 150, 5, 0.80, 12)"
+                      style="padding:10px 18px;font-size:13px;">Barbearia</button>
+              <button class="btn btn-secondary" onclick="aplicarCenario(2000, 800, 3, 1.20, 8)"
+                      style="padding:10px 18px;font-size:13px;">Solar</button>
+              <button class="btn btn-secondary" onclick="aplicarCenario(800, 60, 8, 0.50, 15)"
+                      style="padding:10px 18px;font-size:13px;">Hamburguer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="results-panel">
+          <div class="results-header">
+            <h2>SEUS RESULTADOS</h2>
+            <p>Projeção baseada nos dados informados</p>
+          </div>
+
+          <div class="results-body">
+            <div class="result-item">
+              <div class="result-label">🖱️ Cliques estimados / mês</div>
+              <div class="result-value" id="res-cliques">667</div>
+            </div>
+            <div class="result-item">
+              <div class="result-label">📥 Leads gerados / mês</div>
+              <div class="result-value" id="res-leads">67</div>
+            </div>
+            <div class="result-item">
+              <div class="result-label">🤝 Clientes conquistados / mês</div>
+              <div class="result-value" id="res-clientes">2</div>
+            </div>
+            <div class="result-item">
+              <div class="result-label">💰 Faturamento potencial / mês</div>
+              <div class="result-value" id="res-faturamento" style="color:var(--yellow);">R$ 600</div>
+            </div>
+            <div class="result-item">
+              <div class="result-label">📈 Lucro líquido estimado / mês</div>
+              <div class="result-value" id="res-lucro">R$ -400</div>
+            </div>
+          </div>
+
+          <div class="result-roi" style="margin:0 36px 8px;">
+            <div class="roi-label">ROI Total</div>
+            <div class="roi-value" id="res-roi">-40%</div>
+            <div class="roi-sub">Retorno sobre o investimento em anúncios</div>
+          </div>
+
+          <div id="roi-insight" style="margin:8px 36px 16px;padding:14px 18px;border-radius:6px;font-size:13px;line-height:1.5;">
+          </div>
+
+          <div class="results-cta">
+            <a id="wa-link"
+               href="https://wa.me/5581999999999?text=Olá!%20Usei%20a%20calculadora%20de%20ROI%20da%20Lampions%20e%20quero%20maximizar%20meus%20resultados!"
+               target="_blank" class="btn btn-primary">
+              ↗ Quero esse resultado real
+            </a>
+            <p class="results-disclaimer">
+              * Valores estimados com base nos dados informados. Resultados reais podem variar
+              conforme segmento, criativo e otimização das campanhas.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ── How it works ── -->
+  <section class="how-works">
+    <div class="container">
+      <div class="label">Entenda o cálculo</div>
+      <h2 class="section-title">COMO <span>FUNCIONA?</span></h2>
+      <div class="grid-3 how-works">
+        <div class="how-card">
+          <span class="how-icon">🖱️</span>
+          <h3>CLIQUES</h3>
+          <p>Investimento dividido pelo CPC (custo por clique). Quanto mais otimizados seus anúncios, mais barato fica cada clique.</p>
+        </div>
+        <div class="how-card">
+          <span class="how-icon">📥</span>
+          <h3>LEADS</h3>
+          <p>Percentual dos visitantes que tomam uma ação (formulário, DM, WhatsApp). Uma boa landing page aumenta muito essa taxa.</p>
+        </div>
+        <div class="how-card">
+          <span class="how-icon">💰</span>
+          <h3>RECEITA</h3>
+          <p>Clientes conquistados multiplicados pelo ticket médio. O ROI cresce conforme o processo de vendas é otimizado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">LAMPIONS<span>.</span></div>
+        <p class="footer-copy">© 2025 Lampions Marketing. Recife/PE.</p>
+        <a href="index.html" style="font-size:13px;color:var(--gray);text-decoration:none;">← Voltar ao site</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function fmt(n) {
+      return n.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    function fmtMoeda(n) {
+      return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    function calcular() {
+      const inv       = parseFloat(document.getElementById('investimento').value) || 0;
+      const ticket    = parseFloat(document.getElementById('ticket').value) || 0;
+      const conv      = parseFloat(document.getElementById('conversao').value) / 100 || 0;
+      const cpc       = parseFloat(document.getElementById('cpc').value) || 0.01;
+      const leadRate  = parseFloat(document.getElementById('leadRate').value) / 100 || 0;
+
+      const cliques   = cpc > 0 ? inv / cpc : 0;
+      const leads     = cliques * leadRate;
+      const clientes  = leads * conv;
+      const faturamento = clientes * ticket;
+      const lucro     = faturamento - inv;
+      const roi       = inv > 0 ? ((faturamento - inv) / inv) * 100 : 0;
+
+      document.getElementById('res-cliques').textContent    = fmt(Math.round(cliques));
+      document.getElementById('res-leads').textContent      = fmt(Math.round(leads));
+      document.getElementById('res-clientes').textContent   = fmt(Math.round(clientes));
+      document.getElementById('res-faturamento').textContent = fmtMoeda(Math.round(faturamento));
+      document.getElementById('res-lucro').textContent      = fmtMoeda(Math.round(lucro));
+      document.getElementById('res-roi').textContent        = fmt(Math.round(roi)) + '%';
+
+      // ROI color + insight
+      const roiEl    = document.getElementById('res-roi');
+      const lucroEl  = document.getElementById('res-lucro');
+      const insightEl = document.getElementById('roi-insight');
+
+      if (roi >= 200) {
+        roiEl.style.color = '#4ade80';
+        lucroEl.style.color = '#4ade80';
+        insightEl.style.background = 'rgba(74,222,128,0.08)';
+        insightEl.style.border = '1px solid rgba(74,222,128,0.2)';
+        insightEl.style.color = '#4ade80';
+        insightEl.innerHTML = '🔥 <strong>Excelente!</strong> ROI acima de 200% é o objetivo de toda campanha bem otimizada. Hora de escalar o investimento!';
+      } else if (roi >= 100) {
+        roiEl.style.color = 'var(--yellow)';
+        lucroEl.style.color = 'var(--yellow)';
+        insightEl.style.background = 'rgba(245,195,0,0.06)';
+        insightEl.style.border = '1px solid rgba(245,195,0,0.2)';
+        insightEl.style.color = 'var(--yellow)';
+        insightEl.innerHTML = '✅ <strong>Bom resultado!</strong> Você já está lucrando. Com otimização de criativos e landing page, esse número pode dobrar.';
+      } else if (roi >= 0) {
+        roiEl.style.color = '#f97316';
+        lucroEl.style.color = '#f97316';
+        insightEl.style.background = 'rgba(249,115,22,0.06)';
+        insightEl.style.border = '1px solid rgba(249,115,22,0.2)';
+        insightEl.style.color = '#f97316';
+        insightEl.innerHTML = '⚠️ <strong>Margem apertada.</strong> Você não está perdendo dinheiro, mas também não está otimizado. Pequenas melhorias na conversão podem transformar esse cenário.';
+      } else {
+        roiEl.style.color = '#f87171';
+        lucroEl.style.color = '#f87171';
+        insightEl.style.background = 'rgba(248,113,113,0.06)';
+        insightEl.style.border = '1px solid rgba(248,113,113,0.2)';
+        insightEl.style.color = '#f87171';
+        insightEl.innerHTML = '🚨 <strong>Atenção!</strong> Esse cenário está no prejuízo. Aumente o ticket médio, melhore a taxa de conversão ou reduza o CPC com criativos melhores.';
+      }
+
+      // Update WhatsApp link with results summary
+      const summary = `Olá! Simulei meu ROI na calculadora da Lampions:%0A%0A• Investimento: ${fmtMoeda(inv)}/mês%0A• Faturamento potencial: ${fmtMoeda(Math.round(faturamento))}/mês%0A• ROI estimado: ${fmt(Math.round(roi))}%%%0A%0AQuero melhorar esses resultados com a Lampions!`;
+      document.getElementById('wa-link').href = `https://wa.me/5581999999999?text=${summary}`;
+
+      // Sync CPC range display
+      const cpcVal = parseFloat(document.getElementById('cpc').value) || 0;
+      document.getElementById('cpcDisplay').textContent = 'R$' + cpcVal.toFixed(2).replace('.', ',');
+      document.getElementById('cpcRange').value = Math.min(cpcVal, 20);
+    }
+
+    function syncRange(inputId, rangeId) {
+      const rangeEl = document.getElementById(rangeId);
+      const inputEl = document.getElementById(inputId);
+      const displayId = rangeId.replace('Range', 'Display');
+      inputEl.value = rangeEl.value;
+      const displayEl = document.getElementById(displayId);
+      if (displayEl) displayEl.textContent = rangeEl.value + '%';
+    }
+
+    function syncInput(inputId, rangeId, displayId, suffix) {
+      const inputEl   = document.getElementById(inputId);
+      const rangeEl   = document.getElementById(rangeId);
+      const displayEl = document.getElementById(displayId);
+      const val = parseFloat(inputEl.value) || 0;
+      rangeEl.value = Math.min(val, parseFloat(rangeEl.max));
+      if (displayEl) displayEl.textContent = val + suffix;
+    }
+
+    function aplicarCenario(inv, ticket, conv, cpc, leadRate) {
+      document.getElementById('investimento').value = inv;
+      document.getElementById('ticket').value = ticket;
+      document.getElementById('conversao').value = conv;
+      document.getElementById('conversaoRange').value = conv;
+      document.getElementById('conversaoDisplay').textContent = conv + '%';
+      document.getElementById('cpc').value = cpc;
+      document.getElementById('leadRate').value = leadRate;
+      document.getElementById('leadRateRange').value = leadRate;
+      document.getElementById('leadRateDisplay').textContent = leadRate + '%';
+      calcular();
+    }
+
+    // Init
+    calcular();
+  </script>
+</body>
+</html>

@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lampions Marketing — Agência de Marketing Digital em Recife</title>
+  <meta name="description" content="Transformamos marcas em resultados com gestão de tráfego, redes sociais e produção cinematográfica. Recife/PE." />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 100px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(245,195,0,0.07) 0%, transparent 70%),
+                  radial-gradient(ellipse 50% 50% at 20% 80%, rgba(26,107,42,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: clamp(64px, 8vw, 108px);
+      line-height: 0.9;
+      margin-bottom: 28px;
+    }
+
+    .hero-title .highlight { color: var(--yellow); }
+    .hero-title .green { color: var(--green); }
+
+    .hero-desc {
+      font-size: 18px;
+      color: var(--gray);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .hero-stats {
+      background: var(--black-3);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .stat-item {}
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--gray);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .stat-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* ── Services ── */
+    .services { background: var(--black-2); }
+
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 64px;
+      gap: 32px;
+    }
+
+    .service-card {
+      background: var(--black);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 40px 32px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .service-card:hover {
+      border-color: var(--yellow);
+      transform: translateY(-6px);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(245,195,0,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-size: 24px;
+    }
+
+    .service-card h3 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .service-card p {
+      color: var(--gray);
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .service-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── Cases ── */
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .case-item {
+      background: var(--black-3);
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .case-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 60%);
+      z-index: 1;
+    }
+
+    .case-emoji {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-60%);
+      font-size: 56px;
+      opacity: 0.15;
+    }
+
+    .case-content { position: relative; z-index: 2; }
+
+    .case-category {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 6px;
+    }
+
+    .case-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; }
+
+    .case-result {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    /* ── Process ── */
+    .process { background: var(--black-2); }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 64px;
+      position: relative;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: rgba(245,195,0,0.2);
+      z-index: 0;
+    }
+
+    .step { text-align: center; padding: 0 20px; position: relative; z-index: 1; }
+
+    .step-num {
+      width: 64px;
+      height: 64px;
+      background: var(--yellow);
+      color: var(--black);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .step h3 { font-size: 24px; margin-bottom: 12px; }
+    .step p { font-size: 14px; color: var(--gray); line-height: 1.6; }
+
+    /* ── About Paulo ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-photo {
+      aspect-ratio: 3/4;
+      background: var(--black-3);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: var(--gray);
+      text-align: center;
+      padding: 40px;
+    }
+
+    .about-photo .photo-icon { font-size: 64px; opacity: 0.3; }
+    .about-photo .photo-hint { font-size: 13px; letter-spacing: 0.04em; }
+
+    .about-content {}
+    .about-content .section-title { margin-bottom: 24px; }
+
+    .about-bio {
+      color: var(--gray);
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+
+    .about-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 36px; }
+
+    .about-tag {
+      background: rgba(245,195,0,0.08);
+      border: 1px solid rgba(245,195,0,0.2);
+      color: var(--yellow);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-radius: 4px;
+    }
+
+    .social-links { display: flex; gap: 16px; }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .social-link:hover { color: var(--yellow); }
+
+    /* ── Testimonials ── */
+    .testimonials { background: var(--black-2); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+    }
+
+    .testimonial-card {
+      background: var(--black);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 36px;
+    }
+
+    .testimonial-stars { color: var(--yellow); font-size: 18px; margin-bottom: 20px; }
+
+    .testimonial-text {
+      color: var(--gray-light);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+
+    .testimonial-author { display: flex; align-items: center; gap: 14px; }
+
+    .author-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(245,195,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .author-name { font-weight: 700; font-size: 15px; }
+    .author-company { font-size: 12px; color: var(--gray); }
+
+    /* ── CTA Banner ── */
+    .cta-banner {
+      background: var(--yellow);
+      padding: 80px 0;
+    }
+
+    .cta-banner .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .cta-banner h2 {
+      font-size: clamp(40px, 5vw, 68px);
+      color: var(--black);
+      line-height: 0.95;
+    }
+
+    .cta-banner p {
+      color: rgba(10,10,10,0.65);
+      font-size: 17px;
+      max-width: 400px;
+      margin-top: 12px;
+    }
+
+    .cta-banner .btn-primary {
+      background: var(--black);
+      color: var(--yellow);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── Contact ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-top: 64px;
+    }
+
+    .contact-info h3 {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    .contact-info p {
+      color: var(--gray);
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .contact-detail-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(245,195,0,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-text { font-size: 15px; color: var(--gray-light); }
+    .contact-detail-label { font-size: 11px; color: var(--gray); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 48px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--yellow);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-logo span { color: var(--white); }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .footer-links { display: flex; gap: 24px; }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--yellow); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: row; flex-wrap: wrap; }
+      .cases-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-steps { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+      .process-steps::before { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-photo { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .cta-banner .container { flex-direction: column; text-align: center; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-title { font-size: 58px; }
+      .cases-grid { grid-template-columns: 1fr; }
+      .services-header { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="nav-logo">LAMPIONS<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#cases">Cases</a></li>
+        <li><a href="#processo">Processo</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#contato" class="nav-cta">Fale Conosco</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <p class="hero-eyebrow">▸ Agência de Marketing Digital — Recife/PE</p>
+          <h1 class="hero-title">
+            TRANSFOR<br>
+            MAMOS<br>
+            <span class="highlight">MARCAS</span><br>
+            EM<br>
+            <span class="green">RESULTADOS</span>
+          </h1>
+          <p class="hero-desc">
+            Do tráfego pago à produção cinematográfica — entregamos estratégia,
+            execução e resultado real para negócios que querem crescer de verdade.
+          </p>
+          <div class="hero-actions">
+            <a href="https://wa.me/5581999999999?text=Olá%2C%20quero%20conhecer%20a%20Lampions%20Marketing!"
+               class="btn btn-primary" target="_blank">
+              ↗ Quero crescer agora
+            </a>
+            <a href="#cases" class="btn btn-secondary">Ver cases</a>
+          </div>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num">50+</div>
+            <div class="stat-label">Clientes atendidos</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-num">300%</div>
+            <div class="stat-label">ROI médio dos clientes</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-num">5+</div>
+            <div class="stat-label">Anos de experiência</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-num">10+</div>
+            <div class="stat-label">Segmentos dominados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services ── -->
+  <section class="services" id="servicos">
+    <div class="container">
+      <div class="services-header">
+        <div>
+          <div class="label">O que fazemos</div>
+          <h2 class="section-title">NOSSOS<br><span>SERVIÇOS</span></h2>
+        </div>
+        <p class="section-subtitle">
+          Soluções completas de marketing digital para transformar sua marca
+          em referência no mercado recifense e além.
+        </p>
+      </div>
+
+      <div class="grid-4">
+        <div class="service-card">
+          <div class="service-icon">📱</div>
+          <h3>Gestão de Redes Sociais</h3>
+          <p>Conteúdo estratégico, consistente e com identidade visual forte que posiciona sua marca como autoridade.</p>
+          <div class="service-tags">
+            <span class="tag">Instagram</span>
+            <span class="tag">Reels</span>
+            <span class="tag">Copywriting</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🎯</div>
+          <h3>Gestão de Tráfego Pago</h3>
+          <p>Campanhas no Meta Ads e Google Ads otimizadas para gerar leads qualificados e vendas reais.</p>
+          <div class="service-tags">
+            <span class="tag">Meta Ads</span>
+            <span class="tag">Google Ads</span>
+            <span class="tag">ROI</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🎬</div>
+          <h3>Produção Cinematográfica</h3>
+          <p>Vídeos institucionais, reels e conteúdo audiovisual com qualidade de cinema para sua marca se destacar.</p>
+          <div class="service-tags">
+            <span class="tag">Vídeo</span>
+            <span class="tag">Reels</span>
+            <span class="tag">Institucional</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">✦</div>
+          <h3>Identidade Visual & Branding</h3>
+          <p>Criação e fortalecimento de marca para que sua empresa seja reconhecida, lembrada e escolhida.</p>
+          <div class="service-tags">
+            <span class="tag">Logo</span>
+            <span class="tag">Branding</span>
+            <span class="tag">Design</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Cases ── -->
+  <section id="cases">
+    <div class="container">
+      <div class="label">Resultados reais</div>
+      <h2 class="section-title">NOSSOS<br><span>CASES</span></h2>
+    </div>
+    <div class="cases-grid">
+      <div class="case-item">
+        <div class="case-emoji">✂️</div>
+        <div class="case-content">
+          <div class="case-category">Barbearia</div>
+          <div class="case-title">BARBER DO BAIRRO</div>
+          <div class="case-result">+240% agendamentos em 60 dias</div>
+        </div>
+      </div>
+      <div class="case-item">
+        <div class="case-emoji">🍔</div>
+        <div class="case-content">
+          <div class="case-category">Alimentação</div>
+          <div class="case-title">SMASH BURGER</div>
+          <div class="case-result">+180% pedidos via delivery</div>
+        </div>
+      </div>
+      <div class="case-item">
+        <div class="case-emoji">☀️</div>
+        <div class="case-content">
+          <div class="case-category">Energia Solar</div>
+          <div class="case-title">SOLAR DO NORDESTE</div>
+          <div class="case-result">ROI de 420% em 90 dias</div>
+        </div>
+      </div>
+      <div class="case-item">
+        <div class="case-emoji">🍦</div>
+        <div class="case-content">
+          <div class="case-category">Sorvetes</div>
+          <div class="case-title">GELATO PERNAMBUCO</div>
+          <div class="case-result">+5k seguidores em 45 dias</div>
+        </div>
+      </div>
+      <div class="case-item">
+        <div class="case-emoji">🥟</div>
+        <div class="case-content">
+          <div class="case-category">Alimentação</div>
+          <div class="case-title">PASTÉIS DA ESQUINA</div>
+          <div class="case-result">+300% faturamento no mês</div>
+        </div>
+      </div>
+      <div class="case-item" style="background: rgba(245,195,0,0.05); border: 2px solid rgba(245,195,0,0.2);">
+        <div class="case-content" style="display:flex;flex-direction:column;justify-content:center;height:100%;text-align:center;">
+          <div class="case-category" style="text-align:center;">Sua empresa</div>
+          <div class="case-title" style="font-size:32px;margin-bottom:16px;">SEU NOME AQUI?</div>
+          <a href="#contato" class="btn btn-primary" style="margin:0 auto;font-size:14px;padding:12px 24px;">Começar agora →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Process ── -->
+  <section class="process" id="processo">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:0;">
+        <div class="label">Como trabalhamos</div>
+        <h2 class="section-title">NOSSO <span>PROCESSO</span></h2>
+        <p class="section-subtitle" style="margin: 0 auto;">
+          Do diagnóstico ao resultado — cada etapa com estratégia, execução e entrega.
+        </p>
+      </div>
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>DIAGNÓSTICO</h3>
+          <p>Analisamos sua marca, concorrência e mercado para entender onde você está e onde pode chegar.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>ESTRATÉGIA</h3>
+          <p>Montamos um plano personalizado com metas claras, canais certos e prazos definidos.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>EXECUÇÃO</h3>
+          <p>Colocamos em prática com produção de conteúdo, campanhas ativas e monitoramento diário.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3>RESULTADOS</h3>
+          <p>Relatórios transparentes, otimização contínua e crescimento real mensurável.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── About Paulo ── -->
+  <section id="sobre">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-photo">
+          <div class="photo-icon">👤</div>
+          <div class="photo-hint">Foto do Paulo<br><span style="color:rgba(136,136,136,0.5);font-size:11px;">(adicionar foto aqui)</span></div>
+        </div>
+        <div class="about-content">
+          <div class="label">Quem está por trás</div>
+          <h2 class="section-title">PAULO<br><span>LAMPIONS</span></h2>
+          <div class="divider"></div>
+          <p class="about-bio">
+            Multi-empreendedor digital, fundador da Lampions Marketing e referência em marketing
+            estratégico em Recife/PE. Com anos de experiência transformando pequenos e médios
+            negócios em marcas dominantes, Paulo combina visão estratégica com execução cinematográfica.
+          </p>
+          <p class="about-bio">
+            De barbearias a empresas de energia solar — se tem marca, tem resultado com a Lampions.
+          </p>
+          <div class="about-tags">
+            <span class="about-tag">Marketing Digital</span>
+            <span class="about-tag">Tráfego Pago</span>
+            <span class="about-tag">Produção Audiovisual</span>
+            <span class="about-tag">Recife/PE</span>
+          </div>
+          <div class="social-links">
+            <a href="https://instagram.com/paulolampions" target="_blank" class="social-link">
+              📷 @paulolampions
+            </a>
+            <a href="https://instagram.com/agencialampions" target="_blank" class="social-link">
+              📷 @agencialampions
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Testimonials ── -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="label">O que dizem nossos clientes</div>
+      <h2 class="section-title">QUEM JÁ <span>CRESCEU</span></h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "A Lampions transformou completamente nossa presença digital. Em menos de 2 meses,
+            triplicamos os agendamentos. Qualidade de conteúdo que nunca tinha visto em Recife."
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">✂️</div>
+            <div>
+              <div class="author-name">Carlos Mendes</div>
+              <div class="author-company">Proprietário — Barbearia</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "Investimos em tráfego pago com a Lampions e o retorno foi absurdo. Cada real
+            investido voltou multiplicado. Time extremamente profissional e comprometido."
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">☀️</div>
+            <div>
+              <div class="author-name">Roberto Alves</div>
+              <div class="author-company">Sócio — Energia Solar</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "Os vídeos que eles produziram para nossa lanchonete pareciam de filme.
+            As vendas pelo Instagram dispararam. Indico de olhos fechados."
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">🍔</div>
+            <div>
+              <div class="author-name">Ana Rodrigues</div>
+              <div class="author-company">Fundadora — Hamburgueria</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA Banner ── -->
+  <section class="cta-banner">
+    <div class="container">
+      <div>
+        <h2>PRONTO PARA<br>CRESCER DE VERDADE?</h2>
+        <p>Fale com a Lampions hoje e descubra quanto sua marca pode faturar com estratégia certa.</p>
+      </div>
+      <a href="https://wa.me/5581999999999?text=Olá%2C%20quero%20um%20diagnóstico%20gratuito%20da%20Lampions!"
+         target="_blank" class="btn btn-primary">
+        ↗ Agendar diagnóstico grátis
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Contact ── -->
+  <section id="contato">
+    <div class="container">
+      <div class="label">Fale conosco</div>
+      <h2 class="section-title">VAMOS <span>CONVERSAR?</span></h2>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Entre em contato</h3>
+          <p>
+            Preencha o formulário ou fale direto pelo WhatsApp. Respondemos em até 24 horas
+            e oferecemos um diagnóstico gratuito para novos clientes.
+          </p>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📍</div>
+            <div>
+              <div class="contact-detail-label">Localização</div>
+              <div class="contact-detail-text">Recife, Pernambuco — PE</div>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📱</div>
+            <div>
+              <div class="contact-detail-label">WhatsApp</div>
+              <div class="contact-detail-text">(81) 9 9999-9999</div>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📷</div>
+            <div>
+              <div class="contact-detail-label">Instagram</div>
+              <div class="contact-detail-text">@agencialampions</div>
+            </div>
+          </div>
+
+          <div style="margin-top:32px;">
+            <a href="roi-calculator.html" class="btn btn-secondary" style="font-size:15px;padding:14px 28px;">
+              🧮 Calcular ROI dos seus anúncios
+            </a>
+          </div>
+        </div>
+
+        <form id="contact-form" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label>Nome completo</label>
+            <input type="text" name="nome" placeholder="Seu nome" required />
+          </div>
+          <div class="form-group">
+            <label>Empresa / Negócio</label>
+            <input type="text" name="empresa" placeholder="Nome da empresa ou segmento" />
+          </div>
+          <div class="form-group">
+            <label>WhatsApp</label>
+            <input type="tel" name="whatsapp" placeholder="(81) 9 9999-9999" required />
+          </div>
+          <div class="form-group">
+            <label>Como posso te ajudar?</label>
+            <textarea name="mensagem" placeholder="Conte um pouco sobre seu negócio e seus objetivos..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+            Enviar mensagem →
+          </button>
+          <p id="form-status" style="margin-top:16px;font-size:14px;color:var(--yellow);display:none;text-align:center;"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">LAMPIONS<span>.</span></div>
+        <p class="footer-copy">© 2025 Lampions Marketing. Recife/PE. Todos os direitos reservados.</p>
+        <div class="footer-links">
+          <a href="https://instagram.com/agencialampions" target="_blank">Instagram</a>
+          <a href="roi-calculator.html">Calculadora ROI</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Contact form — redirect to WhatsApp
+    function handleSubmit(e) {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const nome = data.get('nome');
+      const empresa = data.get('empresa');
+      const whatsapp = data.get('whatsapp');
+      const msg = data.get('mensagem');
+
+      const text = `Olá! Vim pelo site da Lampions.%0A%0A*Nome:* ${nome}%0A*Empresa:* ${empresa || 'Não informado'}%0A*WhatsApp:* ${whatsapp}%0A%0A*Mensagem:*%0A${msg}`;
+      window.open(`https://wa.me/5581999999999?text=${text}`, '_blank');
+
+      const status = document.getElementById('form-status');
+      status.textContent = '✓ Redirecionando para o WhatsApp...';
+      status.style.display = 'block';
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>
