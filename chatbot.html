@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot WhatsApp — Paulo Lampions</title>
+<style>
+  :root{
+    --bg-page:#0A0A0A;
+    --bg-chat:#0B141A;
+    --bg-header:#202C33;
+    --bubble-bot:#005C4B;
+    --bubble-user:#1F2C34;
+    --text-light:#E9EDEF;
+    --text-muted:#8696A0;
+    --accent-yellow:#F5C300;
+    --accent-green:#1A6B2A;
+    --send-green:#00A884;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg-page);
+    font-family:"Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .phone{
+    width:100%;
+    max-width:420px;
+    height:100vh;
+    max-height:860px;
+    background:var(--bg-chat);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    box-shadow:0 0 40px rgba(0,0,0,0.6);
+    position:relative;
+  }
+
+  @media (min-width:480px){
+    .phone{ border-radius:16px; margin:16px; }
+  }
+
+  /* Header */
+  .header{
+    background:var(--bg-header);
+    color:var(--text-light);
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-shrink:0;
+  }
+
+  .avatar{
+    width:40px; height:40px;
+    border-radius:50%;
+    background:var(--accent-green);
+    color:var(--accent-yellow);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700;
+    font-size:15px;
+    flex-shrink:0;
+  }
+
+  .contact-info{ flex:1; min-width:0; }
+  .contact-info .name{
+    font-size:16px; font-weight:600;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .contact-info .status{ font-size:12.5px; color:var(--text-muted); }
+
+  .reset-btn{
+    background:transparent;
+    border:none;
+    color:var(--text-light);
+    font-size:20px;
+    cursor:pointer;
+    padding:6px;
+    line-height:1;
+    border-radius:50%;
+    transition:background .15s;
+  }
+  .reset-btn:hover{ background:rgba(255,255,255,0.08); }
+
+  /* Chat area */
+  .chat{
+    flex:1;
+    overflow-y:auto;
+    padding:14px 10px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02) 0, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.015) 0, transparent 40%);
+  }
+
+  .row{ display:flex; width:100%; }
+  .row.bot{ justify-content:flex-start; }
+  .row.user{ justify-content:flex-end; }
+
+  .bubble{
+    max-width:78%;
+    padding:7px 10px 8px 10px;
+    border-radius:9px;
+    font-size:14.3px;
+    line-height:1.35;
+    color:var(--text-light);
+    position:relative;
+    word-wrap:break-word;
+    white-space:pre-wrap;
+    box-shadow:0 1px 1px rgba(0,0,0,0.3);
+    animation:pop .18s ease-out;
+  }
+
+  @keyframes pop{
+    from{ opacity:0; transform:translateY(4px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .bubble.bot{ background:var(--bubble-bot); border-top-left-radius:2px; }
+  .bubble.user{ background:var(--bubble-user); border-top-right-radius:2px; }
+
+  .bubble .time{
+    display:block;
+    font-size:10.5px;
+    color:rgba(233,237,239,0.65);
+    text-align:right;
+    margin-top:3px;
+  }
+
+  .bubble b{ font-weight:700; }
+
+  /* Typing indicator */
+  .typing-bubble{
+    background:var(--bubble-bot);
+    border-top-left-radius:2px;
+    padding:10px 14px;
+    display:flex;
+    gap:4px;
+    align-items:center;
+    width:fit-content;
+  }
+  .typing-bubble span{
+    width:6px; height:6px;
+    border-radius:50%;
+    background:rgba(233,237,239,0.7);
+    animation:blink 1.2s infinite;
+  }
+  .typing-bubble span:nth-child(2){ animation-delay:0.2s; }
+  .typing-bubble span:nth-child(3){ animation-delay:0.4s; }
+  @keyframes blink{
+    0%, 80%, 100%{ opacity:0.3; transform:scale(0.8); }
+    40%{ opacity:1; transform:scale(1); }
+  }
+
+  /* Option chips */
+  .options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:4px 4px 10px 4px;
+  }
+
+  .chip{
+    background:transparent;
+    border:1px solid var(--send-green);
+    color:var(--send-green);
+    padding:8px 14px;
+    border-radius:18px;
+    font-size:13.5px;
+    cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .chip:hover{ background:var(--send-green); color:#04120E; }
+
+  /* WhatsApp CTA button */
+  .wa-button{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--send-green);
+    color:#04120E;
+    font-weight:700;
+    padding:10px 18px;
+    border-radius:22px;
+    text-decoration:none;
+    font-size:14px;
+    margin:4px;
+    border:none;
+    cursor:pointer;
+  }
+
+  /* Composer */
+  .composer{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--bg-header);
+    padding:8px 10px;
+    flex-shrink:0;
+  }
+
+  .composer input{
+    flex:1;
+    background:#2A3942;
+    border:none;
+    outline:none;
+    color:var(--text-light);
+    padding:11px 14px;
+    border-radius:22px;
+    font-size:14.5px;
+  }
+
+  .composer input::placeholder{ color:var(--text-muted); }
+
+  .composer input:disabled{ opacity:0.4; }
+
+  .composer button{
+    background:var(--send-green);
+    border:none;
+    color:#04120E;
+    width:38px; height:38px;
+    border-radius:50%;
+    font-size:16px;
+    cursor:pointer;
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .composer button:disabled{ opacity:0.4; cursor:default; }
+</style>
+</head>
+<body>
+
+  <div class="phone">
+    <div class="header">
+      <div class="avatar">PL</div>
+      <div class="contact-info">
+        <div class="name">Paulo Lampions 🏆</div>
+        <div class="status" id="statusLine">online</div>
+      </div>
+      <button class="reset-btn" id="resetBtn" title="Reiniciar conversa">⟳</button>
+    </div>
+
+    <div class="chat" id="chat"></div>
+
+    <div class="composer">
+      <input type="text" id="textInput" placeholder="Aguarde..." disabled>
+      <button id="sendBtn" disabled>➤</button>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const chatEl = document.getElementById('chat');
+  const textInput = document.getElementById('textInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  const WA_NUMBER = '5581983036630';
+  const TYPE_DELAY = 800;
+
+  let userData = { name:'' };
+  let inputCallback = null;
+
+  function nowTime(){
+    return new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  }
+
+  function formatText(str){
+    return str
+      .replace(/\n/g, '<br>')
+      .replace(/\*(.+?)\*/g, '<b>$1</b>');
+  }
+
+  function scrollToBottom(){
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  function addMessage(who, text){
+    const row = document.createElement('div');
+    row.className = 'row ' + who;
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble ' + who;
+    bubble.innerHTML = formatText(text) + '<span class="time">' + nowTime() + '</span>';
+    row.appendChild(bubble);
+    chatEl.appendChild(row);
+    scrollToBottom();
+  }
+
+  function showTyping(){
+    const row = document.createElement('div');
+    row.className = 'row bot';
+    row.id = 'typingRow';
+    const bubble = document.createElement('div');
+    bubble.className = 'typing-bubble';
+    bubble.innerHTML = '<span></span><span></span><span></span>';
+    row.appendChild(bubble);
+    chatEl.appendChild(row);
+    scrollToBottom();
+  }
+
+  function removeTyping(){
+    const row = document.getElementById('typingRow');
+    if(row) row.remove();
+  }
+
+  // Sends one or more bot lines in sequence, each preceded by a typing indicator, then calls next()
+  function botSay(lines, next){
+    if(!Array.isArray(lines)) lines = [lines];
+    let i = 0;
+    function step(){
+      if(i >= lines.length){
+        if(next) next();
+        return;
+      }
+      showTyping();
+      setTimeout(() => {
+        removeTyping();
+        addMessage('bot', lines[i]);
+        i++;
+        step();
+      }, TYPE_DELAY);
+    }
+    step();
+  }
+
+  function clearPending(){
+    const existing = chatEl.querySelector('.options');
+    if(existing) existing.remove();
+    disableInput();
+  }
+
+  function showOptions(options){
+    clearPending();
+    const wrap = document.createElement('div');
+    wrap.className = 'options';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.textContent = opt.label;
+      btn.onclick = () => {
+        wrap.remove();
+        addMessage('user', opt.label);
+        setTimeout(() => opt.next(opt.label), 200);
+      };
+      wrap.appendChild(btn);
+    });
+    chatEl.appendChild(wrap);
+    scrollToBottom();
+  }
+
+  function enableInput(placeholder, callback){
+    textInput.disabled = false;
+    sendBtn.disabled = false;
+    textInput.placeholder = placeholder;
+    textInput.value = '';
+    inputCallback = callback;
+    textInput.focus();
+  }
+
+  function disableInput(){
+    textInput.disabled = true;
+    sendBtn.disabled = true;
+    textInput.placeholder = 'Aguarde...';
+    inputCallback = null;
+  }
+
+  function submitInput(){
+    const val = textInput.value.trim();
+    if(!val || !inputCallback) return;
+    const cb = inputCallback;
+    disableInput();
+    addMessage('user', val);
+    textInput.value = '';
+    setTimeout(() => cb(val), 200);
+  }
+
+  sendBtn.addEventListener('click', submitInput);
+  textInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') submitInput();
+  });
+
+  function showWhatsAppButton(){
+    const row = document.createElement('div');
+    row.className = 'row bot';
+    const a = document.createElement('a');
+    a.className = 'wa-button';
+    a.href = 'https://wa.me/' + WA_NUMBER;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = '🟢 Abrir WhatsApp';
+    row.appendChild(a);
+    chatEl.appendChild(row);
+    scrollToBottom();
+  }
+
+  // ---------- FLOW ----------
+
+  function startFlow(){
+    chatEl.innerHTML = '';
+    userData = { name:'' };
+    disableInput();
+    botSay(
+      ['Olá! 👋 Bem-vindo à *Lampions Marketing*!\nSou o assistente virtual do Paulo. Como posso te ajudar hoje?'],
+      () => showOptions([
+        { label:'📋 Quero um orçamento', next: flowOrcamentoStart },
+        { label:'❓ Tenho uma dúvida', next: flowDuvidaMenu },
+        { label:'📅 Quero agendar uma reunião', next: flowAgendarStart },
+      ])
+    );
+  }
+
+  // ETAPA 2A — Orçamento
+  function flowOrcamentoStart(){
+    botSay(
+      ['Ótimo! Para te passar um orçamento certeiro, preciso de algumas informações. 😊\nQual é o seu nome?'],
+      () => enableInput('Digite seu nome...', (name) => {
+        userData.name = name;
+        botSay(
+          [`Prazer, ${name}! 🤝\nQual é o segmento do seu negócio?`],
+          () => showOptions([
+            { label:'💈 Barbearia / Salão', next: flowOrcamentoServico },
+            { label:'🍔 Alimentação / Restaurante', next: flowOrcamentoServico },
+            { label:'⚡ Energia Solar', next: flowOrcamentoServico },
+            { label:'🏪 Outro segmento', next: flowOrcamentoServico },
+          ])
+        );
+      })
+    );
+  }
+
+  function flowOrcamentoServico(){
+    botSay(
+      ['E qual serviço você tem interesse?'],
+      () => showOptions([
+        { label:'📱 Gestão de Redes Sociais', next: flowOrcamentoFinal },
+        { label:'🎯 Tráfego Pago (Anúncios)', next: flowOrcamentoFinal },
+        { label:'🌐 Site / Landing Page', next: flowOrcamentoFinal },
+        { label:'📦 Pacote Completo', next: flowOrcamentoFinal },
+      ])
+    );
+  }
+
+  function flowOrcamentoFinal(){
+    botSay(
+      [`Perfeito, ${userData.name}! Anotei tudo aqui. ✅\nO Paulo vai entrar em contato com você em breve para montar a proposta ideal para o seu negócio.\nEnquanto isso, você pode conhecer nosso trabalho no Instagram: *@agencialampions* 🚀`],
+      finalizeFlow
+    );
+  }
+
+  // ETAPA 2B — Dúvida
+  const duvidaRespostas = {
+    valores: 'Nossos pacotes variam de acordo com o serviço e o tamanho do seu negócio. O melhor é conversar com o Paulo para montar algo sob medida para você. Quer que ele te chame? 😊',
+    servicos: 'A Lampions oferece: gestão de redes sociais, tráfego pago (Meta Ads e Google Ads), produção de conteúdo e criação de sites/landing pages. Algum desses te interessa?',
+    resultado: 'Depende do serviço, mas clientes que investem em tráfego pago costumam ver os primeiros resultados em 15 a 30 dias. Já em redes sociais, o crescimento de autoridade leva de 60 a 90 dias.',
+    parceria: 'É simples: a gente faz um diagnóstico gratuito da sua presença digital, monta uma proposta e começa a trabalhar. Sem contrato longo ou burocracia.',
+  };
+
+  function flowDuvidaMenu(){
+    botSay(
+      ['Claro! Sobre o que é sua dúvida?'],
+      () => showOptions([
+        { label:'💰 Valores e investimento', next: () => flowDuvidaResposta('valores') },
+        { label:'📦 Quais serviços vocês oferecem', next: () => flowDuvidaResposta('servicos') },
+        { label:'⏱️ Quanto tempo leva para ver resultado', next: () => flowDuvidaResposta('resultado') },
+        { label:'🔄 Como funciona a parceria', next: () => flowDuvidaResposta('parceria') },
+      ])
+    );
+  }
+
+  function flowDuvidaResposta(key){
+    botSay(
+      [duvidaRespostas[key]],
+      () => botSay(
+        ['Posso te ajudar com mais alguma coisa?'],
+        () => showOptions([
+          { label:'Sim, tenho outra dúvida', next: flowDuvidaMenu },
+          { label:'Quero falar com o Paulo', next: finalizeFlow },
+        ])
+      )
+    );
+  }
+
+  // ETAPA 2C — Agendar reunião
+  function flowAgendarStart(){
+    botSay(
+      ['Boa escolha! 📅 Qual é o seu nome?'],
+      () => enableInput('Digite seu nome...', (name) => {
+        userData.name = name;
+        botSay(
+          [`Qual o melhor dia para você, ${name}?`],
+          () => showOptions([
+            { label:'Segunda ou Terça', next: flowAgendarPeriodo },
+            { label:'Quarta ou Quinta', next: flowAgendarPeriodo },
+            { label:'Sexta', next: flowAgendarPeriodo },
+            { label:'Fim de semana', next: flowAgendarPeriodo },
+          ])
+        );
+      })
+    );
+  }
+
+  function flowAgendarPeriodo(){
+    botSay(
+      ['E qual período você prefere?'],
+      () => showOptions([
+        { label:'🌅 Manhã (8h–12h)', next: flowAgendarFinal },
+        { label:'☀️ Tarde (13h–18h)', next: flowAgendarFinal },
+        { label:'🌙 Noite (18h–21h)', next: flowAgendarFinal },
+      ])
+    );
+  }
+
+  function flowAgendarFinal(){
+    botSay(
+      ['Anotado! ✅ Paulo vai confirmar o horário com você em breve.\nTem mais alguma coisa que posso ajudar?'],
+      () => showOptions([
+        { label:'Sim, tenho outra dúvida', next: flowDuvidaMenu },
+        { label:'Quero falar com o Paulo', next: finalizeFlow },
+      ])
+    );
+  }
+
+  // FINALIZAÇÃO
+  function finalizeFlow(){
+    clearPending();
+    botSay(
+      ['Você será redirecionado para o WhatsApp do Paulo agora. 🚀\n*Obrigado pelo contato e até já!* 💛'],
+      showWhatsAppButton
+    );
+  }
+
+  resetBtn.addEventListener('click', startFlow);
+
+  startFlow();
+})();
+</script>
+
+</body>
+</html>
